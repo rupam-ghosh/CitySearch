@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -61,11 +63,31 @@ public class MainFragment extends Fragment implements TextWatcher {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Toolbar toolbar = view.findViewById(R.id.toolbar2);
+        toolbar.setTitle(R.string.app_name);
+        toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         TextInputEditText textInputEditText = view.findViewById(R.id.textInputEditText);
         textInputEditText.addTextChangedListener(this);
         message = view.findViewById(R.id.message);
         recyclerView = view.findViewById(R.id.recyclerView);
         SearchResultsAdapter searchResultsAdapter = new SearchResultsAdapter();
+        searchResultsAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (int) v.getTag();
+                Bundle bundle = new Bundle();
+                bundle.putDouble(CityMapFragment.ARGUMENT_LATITUDE,
+                        mViewModel.getSearchResultsLiveData().getValue().get(position).getCoord().getLat());
+                bundle.putDouble(CityMapFragment.ARGUMENT_LONGITUDE,
+                        mViewModel.getSearchResultsLiveData().getValue().get(position).getCoord().getLon());
+                bundle.putString(CityMapFragment.ARGUMENT_TITLE,
+                        mViewModel.getSearchResultsLiveData().getValue().get(position).getName());
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, CityMapFragment.newInstance(bundle))
+                        .addToBackStack(CityMapFragment.class.getName())
+                        .commit();
+            }
+        });
         recyclerView.setAdapter(searchResultsAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),

@@ -15,6 +15,16 @@ import java.util.List;
 public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultViewHolder> {
     private List<City> searchResult;
 
+    public View.OnClickListener getOnClickListener() {
+        return onClickListener;
+    }
+
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
+
+    private View.OnClickListener onClickListener;
+
     public List<City> getSearchResult() {
         return searchResult;
     }
@@ -27,12 +37,13 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultViewH
     @Override
     public SearchResultViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflatedView = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_list_item, parent, false);
+        inflatedView.setOnClickListener(onClickListener);
         return new SearchResultViewHolder(inflatedView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SearchResultViewHolder holder, int position) {
-        holder.setCity(getSearchResult().get(position));
+        holder.setCity(position, getSearchResult().get(position));
     }
 
     @Override

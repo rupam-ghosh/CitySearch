@@ -19,8 +19,9 @@ public class SearchResultViewHolder extends RecyclerView.ViewHolder {
         subtitle = itemView.findViewById(R.id.subtitle);
     }
 
-    public void setCity(City city) {
+    public void setCity(int position, City city) {
         title.setText(String.format("%s, %s", city.getName(), city.getCountry()));
         subtitle.setText(String.format("%s, %s", city.getCoord().getLat(), city.getCoord().getLon()));
+        itemView.setTag(position);
     }
 }
