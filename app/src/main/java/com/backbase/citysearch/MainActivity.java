@@ -1,8 +1,8 @@
 package com.backbase.citysearch;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.backbase.citysearch.ui.main.MainFragment;
 

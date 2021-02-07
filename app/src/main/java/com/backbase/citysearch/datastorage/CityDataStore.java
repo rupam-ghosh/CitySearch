@@ -9,5 +9,7 @@ import java.util.List;
 
 public interface CityDataStore {
     void addCities(@NonNull List<City> cities);
-    @Nullable List<City> findMatchingCities(@NonNull String searchQuery);
+
+    @Nullable
+    List<City> findMatchingCities(@NonNull String searchQuery);
 }

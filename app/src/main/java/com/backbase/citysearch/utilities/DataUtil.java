@@ -23,13 +23,15 @@ public class DataUtil {
         }
     }
 
-    private static @Nullable List<City> readCitiesJSONFileFromAssets(Context context) {
+    private static @Nullable
+    List<City> readCitiesJSONFileFromAssets(Context context) {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(
                     new InputStreamReader(context.getAssets().open("cities.json")));
             Gson gson = new Gson();
-            Type listType = new TypeToken<List<City>>(){}.getType();
+            Type listType = new TypeToken<List<City>>() {
+            }.getType();
             return gson.fromJson(reader, listType);
         } catch (IOException e) {
         } finally {

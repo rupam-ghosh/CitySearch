@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CitySearch</string>
+    <string name="noresult">Could not find relevant results. \n Please try changing the search query</string>
+    <string name="hint">Please enter search query</string>
 </resources>

@@ -7,11 +7,12 @@ import com.backbase.citysearch.datastorage.CityDataStore;
 import com.backbase.citysearch.datastorage.CityDataStoreImpl;
 
 public class MainApplication extends Application {
+    private CityDataStore cityDataStore;
+
     public CityDataStore getCityDataStore() {
         return cityDataStore;
     }
 
-    private CityDataStore cityDataStore;
     @Override
     public void onCreate() {
         super.onCreate();

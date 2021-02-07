@@ -26,30 +26,26 @@ import static org.junit.Assert.*;
 public class SearchAlgoTest {
     @Test
     public void searchWithWrongEntryShouldReturnNull() {
-        CityDataStore cityDataStore = new CityDataStoreImpl();
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        DataUtil.addCitiesToDB(appContext,cityDataStore);
-        List<City> matchingCities = cityDataStore.findMatchingCities("kjabfkabfkabfkaf");
+        List<City> matchingCities = getCityDataStore().findMatchingCities("garbage");
         assertNull(matchingCities);
     }
 
     @Test
     public void searchWithEmptyEntryShouldReturnAllItems() {
-        CityDataStore cityDataStore = new CityDataStoreImpl();
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        DataUtil.addCitiesToDB(appContext,cityDataStore);
-        List<City> matchingCities = cityDataStore.findMatchingCities("");
+        List<City> matchingCities = getCityDataStore().findMatchingCities("");
         assertNotNull(matchingCities);
         assertEquals(209557, matchingCities.size());
     }
 
     @Test
     public void searchShouldReturnCorrectItems() {
+        assertEquals(4, getCityDataStore().findMatchingCities("Sydney").size());
+    }
+
+    private CityDataStore getCityDataStore() {
         CityDataStore cityDataStore = new CityDataStoreImpl();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         DataUtil.addCitiesToDB(appContext,cityDataStore);
-
-        assertEquals(4, cityDataStore.findMatchingCities("Sydney").size());
-        assertEquals(221, cityDataStore.findMatchingCities("Alb").size());
+        return cityDataStore;
     }
 }

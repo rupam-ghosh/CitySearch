@@ -3,7 +3,7 @@ package com.backbase.citysearch.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class City implements Comparable<City>{
+public class City implements Comparable<City> {
 
     @SerializedName("country")
     @Expose
@@ -53,7 +53,7 @@ public class City implements Comparable<City>{
     @Override
     public int compareTo(City o) {
         int nameCompareValue = this.name.compareTo(o.name);
-        if(nameCompareValue == 0) {
+        if (nameCompareValue == 0) {
             return this.country.compareTo(o.country);
         } else {
             return nameCompareValue;

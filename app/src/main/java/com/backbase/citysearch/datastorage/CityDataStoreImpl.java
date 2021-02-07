@@ -15,15 +15,16 @@ import java.util.Collections;
 import java.util.List;
 
 public class CityDataStoreImpl implements CityDataStore {
-    private Index<City> trie;
+    private final Index<City> trie;
     private List<City> sortedCityList;
+
     public CityDataStoreImpl() {
         trie = new TrieImpl<City>();
     }
 
     @Override
     public void addCities(@NonNull List<City> cities) {
-        for(City city: cities) {
+        for (City city : cities) {
             trie.addEntry(city.getName().toLowerCase() + ", " + city.getCountry().toLowerCase(), city);
         }
         Collections.sort(cities);
@@ -33,11 +34,11 @@ public class CityDataStoreImpl implements CityDataStore {
     @Override
     public @Nullable
     List<City> findMatchingCities(@NotNull String searchQuery) {
-        if(TextUtils.isEmpty(searchQuery)) {
+        if (TextUtils.isEmpty(searchQuery)) {
             return sortedCityList;
         }
         List<City> cities = trie.findEntries(searchQuery.toLowerCase());
-        if(cities != null) {
+        if (cities != null) {
             Collections.sort(cities);
         }
         return cities;
