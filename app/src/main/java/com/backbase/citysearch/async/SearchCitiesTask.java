@@ -7,8 +7,8 @@ import com.backbase.citysearch.models.City;
 import java.util.List;
 
 public class SearchCitiesTask extends AsyncTask<String, Void, List<City>> {
-    private SearchCitiesTaskCallback callback;
-    private CityDataStore cityDataStore;
+    private final SearchCitiesTaskCallback callback;
+    private final CityDataStore cityDataStore;
 
     public SearchCitiesTask(SearchCitiesTaskCallback callback, CityDataStore cityDataStore) {
         this.callback = callback;

@@ -1,13 +1,18 @@
 package com.backbase.citysearch.datastorage;
 
 public class InMemoryStore {
-    private CityDataStore cityDataStore = new CityDataStoreImpl();
-    private static InMemoryStore inMemoryStore;
+    private final CityDataStore cityDataStore = new CityDataStoreImpl();
+    private InMemoryStore() {
+
+    }
+
+    private static class InMemoryStoreSingleton
+    {
+        private static final InMemoryStore INSTANCE = new InMemoryStore();
+    }
+
     public static InMemoryStore getInstance() {
-        if(inMemoryStore == null) {
-            inMemoryStore = new InMemoryStore();
-        }
-        return inMemoryStore;
+        return InMemoryStoreSingleton.INSTANCE;
     }
 
     public CityDataStore getCityDataStore() {
