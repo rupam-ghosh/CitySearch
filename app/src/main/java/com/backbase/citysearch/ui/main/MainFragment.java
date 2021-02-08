@@ -6,13 +6,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -22,8 +22,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.backbase.citysearch.R;
 import com.backbase.citysearch.models.City;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
+
+import static com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT;
 
 public class MainFragment extends Fragment implements TextWatcher {
 
@@ -55,9 +58,7 @@ public class MainFragment extends Fragment implements TextWatcher {
                 updateUI(cities);
             }
         });
-        List<City> value = mViewModel.getSearchResultsLiveData().getValue();
-        updateUI(value);
-        mViewModel.searchInitiated("", getActivity().getApplication());
+        onInputQueryChange("");
     }
 
     @Override
@@ -66,7 +67,10 @@ public class MainFragment extends Fragment implements TextWatcher {
         Toolbar toolbar = view.findViewById(R.id.toolbar2);
         toolbar.setTitle(R.string.app_name);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+        TextInputLayout textInputLayout = view.findViewById(R.id.textInputLayout);
+        textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
         TextInputEditText textInputEditText = view.findViewById(R.id.textInputEditText);
+        textInputEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         textInputEditText.addTextChangedListener(this);
         message = view.findViewById(R.id.message);
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -99,6 +103,7 @@ public class MainFragment extends Fragment implements TextWatcher {
     private void updateUI(List<City> value) {
         if (value == null || value.size() == 0) {
             message.setVisibility(View.VISIBLE);
+            message.setText(R.string.noresult);
             recyclerView.setVisibility(View.INVISIBLE);
         } else {
             message.setVisibility(View.INVISIBLE);
@@ -119,11 +124,17 @@ public class MainFragment extends Fragment implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        mViewModel.searchInitiated(s.toString(), getActivity().getApplication());
+        onInputQueryChange(s.toString());
     }
 
     @Override
     public void afterTextChanged(Editable s) {
         // no implementation
+    }
+
+    private void onInputQueryChange(String query) {
+        mViewModel.searchInitiated(query);
+        message.setVisibility(View.VISIBLE);
+        message.setText(R.string.loading);
     }
 }
