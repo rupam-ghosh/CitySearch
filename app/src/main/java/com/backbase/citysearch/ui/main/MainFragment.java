@@ -33,6 +33,8 @@ public class MainFragment extends Fragment implements TextWatcher {
     private MainViewModel mViewModel;
     private RecyclerView recyclerView;
     private TextView message;
+    private TextInputEditText textInputEditText;
+    private static final String ARGUMENT_QUERY = "query";
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -58,7 +60,13 @@ public class MainFragment extends Fragment implements TextWatcher {
                 updateUI(cities);
             }
         });
-        onInputQueryChange("");
+        onInputQueryChange(savedInstanceState != null ? savedInstanceState.getString(ARGUMENT_QUERY) : "");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString(ARGUMENT_QUERY, textInputEditText.getText().toString());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -69,7 +77,7 @@ public class MainFragment extends Fragment implements TextWatcher {
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         TextInputLayout textInputLayout = view.findViewById(R.id.textInputLayout);
         textInputLayout.setEndIconMode(END_ICON_CLEAR_TEXT);
-        TextInputEditText textInputEditText = view.findViewById(R.id.textInputEditText);
+        textInputEditText = view.findViewById(R.id.textInputEditText);
         textInputEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         textInputEditText.addTextChangedListener(this);
         message = view.findViewById(R.id.message);
