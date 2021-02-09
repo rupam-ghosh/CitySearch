@@ -20,11 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.backbase.citysearch.R;
-import com.backbase.citysearch.models.City;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.List;
 
 import static com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT;
 
@@ -51,13 +48,13 @@ public class MainFragment extends Fragment implements TextWatcher {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        mViewModel.getSearchResultsLiveData().observe(this, new Observer<List<City>>() {
+        mViewModel.getCityDataMutableLiveData().observe(this, new Observer<CityData>() {
             @Override
-            public void onChanged(List<City> cities) {
+            public void onChanged(CityData cityData) {
                 SearchResultsAdapter adapter = (SearchResultsAdapter) recyclerView.getAdapter();
-                adapter.setSearchResult(cities);
+                adapter.setSearchResult(cityData.getCities());
                 adapter.notifyDataSetChanged();
-                updateUI(cities);
+                updateUI(cityData);
             }
         });
         onInputQueryChange(savedInstanceState != null ? savedInstanceState.getString(ARGUMENT_QUERY) : "");
@@ -89,11 +86,11 @@ public class MainFragment extends Fragment implements TextWatcher {
                 int position = (int) v.getTag();
                 Bundle bundle = new Bundle();
                 bundle.putDouble(CityMapFragment.ARGUMENT_LATITUDE,
-                        mViewModel.getSearchResultsLiveData().getValue().get(position).getCoord().getLat());
+                        mViewModel.getCityDataMutableLiveData().getValue().getCities().get(position).getCoord().getLat());
                 bundle.putDouble(CityMapFragment.ARGUMENT_LONGITUDE,
-                        mViewModel.getSearchResultsLiveData().getValue().get(position).getCoord().getLon());
+                        mViewModel.getCityDataMutableLiveData().getValue().getCities().get(position).getCoord().getLon());
                 bundle.putString(CityMapFragment.ARGUMENT_TITLE,
-                        mViewModel.getSearchResultsLiveData().getValue().get(position).getName());
+                        mViewModel.getCityDataMutableLiveData().getValue().getCities().get(position).getName());
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, CityMapFragment.newInstance(bundle))
                         .addToBackStack(CityMapFragment.class.getName())
@@ -108,21 +105,28 @@ public class MainFragment extends Fragment implements TextWatcher {
         recyclerView.setLayoutManager(linearLayoutManager);
     }
 
-    private void updateUI(List<City> value) {
-        if (value == null || value.size() == 0) {
-            message.setVisibility(View.VISIBLE);
-            message.setText(R.string.noresult);
-            recyclerView.setVisibility(View.INVISIBLE);
-        } else {
-            message.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
+    private void updateUI(CityData cityData) {
+        switch(cityData.getLoadingState()) {
+            case EMPTY:
+                message.setVisibility(View.VISIBLE);
+                message.setText(R.string.noresult);
+                recyclerView.setVisibility(View.INVISIBLE);
+            case LOADED:
+                message.setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
+                break;
+            case LOADING:
+                message.setVisibility(View.VISIBLE);
+                message.setText(R.string.loading);
+                recyclerView.setVisibility(View.INVISIBLE);
+                break;
         }
     }
 
     @Override
     public void onDestroyView() {
+        mViewModel.getCityDataMutableLiveData().removeObservers(this);
         super.onDestroyView();
-        mViewModel.getSearchResultsLiveData().removeObservers(this);
     }
 
     @Override
@@ -142,7 +146,5 @@ public class MainFragment extends Fragment implements TextWatcher {
 
     private void onInputQueryChange(String query) {
         mViewModel.searchInitiated(query);
-        message.setVisibility(View.VISIBLE);
-        message.setText(R.string.loading);
     }
 }

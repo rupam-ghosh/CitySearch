@@ -1,7 +1,5 @@
 package com.backbase.citysearch;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import com.backbase.citysearch.models.City;
 import com.backbase.citysearch.searchalgo.Index;
 import com.backbase.citysearch.searchalgo.TrieImpl;
