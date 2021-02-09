@@ -25,16 +25,16 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import static com.google.android.material.textfield.TextInputLayout.END_ICON_CLEAR_TEXT;
 
-public class MainFragment extends Fragment implements TextWatcher {
+public class CityListFragment extends Fragment implements TextWatcher {
 
-    private MainViewModel mViewModel;
+    private CityListViewModel mViewModel;
     private RecyclerView recyclerView;
     private TextView message;
     private TextInputEditText textInputEditText;
     private static final String ARGUMENT_QUERY = "query";
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    public static CityListFragment newInstance() {
+        return new CityListFragment();
     }
 
     @Nullable
@@ -47,7 +47,7 @@ public class MainFragment extends Fragment implements TextWatcher {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(CityListViewModel.class);
         mViewModel.getCityDataMutableLiveData().observe(this, new Observer<CityData>() {
             @Override
             public void onChanged(CityData cityData) {

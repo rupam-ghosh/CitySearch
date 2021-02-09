@@ -2,8 +2,8 @@ package com.backbase.citysearch;
 
 import android.content.Context;
 
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.backbase.citysearch.datastorage.CityDataStore;
 import com.backbase.citysearch.datastorage.CityDataStoreImpl;
@@ -15,7 +15,9 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -45,7 +47,7 @@ public class SearchAlgoTest {
     private CityDataStore getCityDataStore() {
         CityDataStore cityDataStore = new CityDataStoreImpl();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        DataUtil.addCitiesToDB(appContext,cityDataStore);
+        DataUtil.addCitiesToDB(appContext, cityDataStore);
         return cityDataStore;
     }
 }

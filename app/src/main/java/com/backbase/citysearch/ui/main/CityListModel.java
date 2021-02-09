@@ -7,7 +7,7 @@ import com.backbase.citysearch.models.City;
 import java.util.List;
 import java.util.Observable;
 
-public class MainModel extends Observable {
+public class CityListModel extends Observable {
     public void searchInitiated(String query) {
         new SearchCitiesTask(new SearchCitiesTask.SearchCitiesTaskCallback() {
             @Override

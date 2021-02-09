@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.backbase.citysearch.ui.main.MainFragment;
+import com.backbase.citysearch.ui.main.CityListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,8 +14,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
-                    .addToBackStack(MainFragment.class.getName())
+                    .replace(R.id.container, CityListFragment.newInstance())
+                    .addToBackStack(CityListFragment.class.getName())
                     .commit();
         }
     }

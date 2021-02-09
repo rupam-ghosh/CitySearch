@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainViewModel extends ViewModel implements Observer {
-    private final MainModel mainModel = new MainModel();
+public class CityListViewModel extends ViewModel implements Observer {
+    private final CityListModel cityListModel = new CityListModel();
     private final MutableLiveData<CityData> cityDataMutableLiveData = new MutableLiveData<>();
     private boolean isModelObserved;
 
     public void searchInitiated(String query) {
         if(!isModelObserved) {
-            mainModel.addObserver(this);
+            cityListModel.addObserver(this);
         }
         cityDataMutableLiveData.setValue(new CityData(CityDataLoadingState.LOADING, null));
-        mainModel.searchInitiated(query);
+        cityListModel.searchInitiated(query);
     }
 
     public MutableLiveData<CityData> getCityDataMutableLiveData() {
@@ -28,7 +28,7 @@ public class MainViewModel extends ViewModel implements Observer {
 
     @Override
     protected void onCleared() {
-        mainModel.deleteObserver(this);
+        cityListModel.deleteObserver(this);
         isModelObserved = false;
         super.onCleared();
     }
